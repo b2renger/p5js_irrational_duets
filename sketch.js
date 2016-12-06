@@ -1,14 +1,11 @@
-// le mapping notes midi + affichage ne va pas !
-// ajouter elements  - selection de preset mode simple - selection de preset mode avancé
 
+// ajouter elements  - selection de preset mode simple - selection de preset mode avancé ou un gros bouton "generate new arrangement
 // affichage de la signature rythmique 4/4 et 3/4 ?
 // travailler les rythmes proposés ne pas hésiter à aller vers des trucs chelous) et faire des choix
-
-
-// shadow pour les boutons ?
-
-// permettre de boucler entre deux index ? de sauter à un index // option pour afficher les valeurs numériques des notes ou légende avec les couleurs suffisante ?
-// afficher index courant.
+// réfléchir à l'usage des gammes : passer sur des transpositions ?
+// permettre de boucler entre deux index ? de sauter à un index
+// option pour afficher les valeurs numériques des notes ou légende avec les couleurs suffisante ?
+// afficher index courant ? / valeurs de pi ? / nom des notes ?
 
 
 var ctx ;
@@ -18,17 +15,17 @@ var current_number = pi;
 var index =0; // track which decimal we are on
 
 // music stuff
-var bpm = 60 ;
+var bpm = 45 ;
 var noteDur = 0.5;
 var sust = 1 ; // not sustain , multiplication of noteDuration instead
 var phraseContainer; //
 var pulse;
 var beatCount = 0; // musical beat
 var barCount =0; // musical bars
-var current_rythm = "Unisson"; // pulse Incr function
-var current_scale = 0; // see utils it's major
-var soundBass = "accordion";
-var soundLead = "accordion";
+var current_rythm = "Unisson Walk"; // pulse Incr function
+var current_scale = 0; // see utils it's linear
+var soundBass = "acoustic_guitar_nylon"
+var soundLead = "acoustic_guitar_nylon";
 // audio analyser
 var amplitude;
 
@@ -126,9 +123,10 @@ function draw(){
     background(206,190,190)
     randomSeed(seed);
 
-    scribble.bowing = (amplitude.getLevel()+0.1)*mouseX/5;
-    scribble.roughness = (amplitude.getLevel()+0.1)*mouseX/50 ;
-    scribble.maxOffset =  pow(amplitude.getLevel()+0.1,2)*mouseX/75 ; 
+    console.log(amplitude.getLevel())
+    scribble.bowing = amplitude.getLevel()+1;
+    scribble.roughness = amplitude.getLevel()+1 ;
+    scribble.maxOffset =  amplitude.getLevel()+1;
   
     backGraphics.drawStave();
     backGraphics.drawTrebbleClef(anchor);
@@ -239,7 +237,7 @@ function leadPlay(time,arg,index){
             index +=1;
             notes.push(new DrawNote(value,newNote,arg, offset, color(0)));
         }     
-    console.log(value)
+
 }
 
 
@@ -249,12 +247,14 @@ function bassPlay(time,arg,index){
     }
     else{   
         var value = current_number[index];
-        var newNote = scales[current_scale][value];    
+        //console.log("bass value : "+value)
+        var newNote = scales[current_scale][value];
+        //console.log("bass scale value : "+newNote)
         var noteName =interval2notes[(int(newNote))]
+        //console.log("bass noteName : "+noteName)
         bass.then(function(inst){
              inst.play(noteName,0,{ duration: noteDur*(arg.length)*sust});
-        });     
-        
+        });
         //console.log("bass : " + noteDur*(arg.length)*sust)
         index+=1;
         bassnotes.push(new DrawNote(value,newNote,arg, offset+spacing*10, color(255)));
@@ -279,7 +279,7 @@ function checkDrawingMargins() {
 
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
-    background(206,190,190)
+
     seed = random(500);
     offset = anchor;
     ylimit = int((windowHeight)/(spacing*(20)));
@@ -288,4 +288,5 @@ function windowResized() {
 
     backGraphics = new DrawBackGraphics(offset);
     gui.resize(1,1,windowWidth,windowHeight);   
+    background(206,190,190)
 }

@@ -35,6 +35,7 @@ function Gui(x,y,w,h){
     bass_selection.changed(change_bass);
 
     scale_selection = createSelect()
+    scale_selection.option('in C Linear');
     scale_selection.option('in C Major');
     scale_selection.option('in C minor');
     scale_selection.option('in C Harmonic minor');
@@ -85,11 +86,11 @@ Gui.prototype.resize = function(x,y,w,h){
     scale_selection.position(this.w/2 -sub_length/2+ rythm_selection.elt.clientWidth + lead_selection.elt.clientWidth + bass_selection.elt.clientWidth +15,          this.y+title.elt.clientHeight*.75);
     // play instructions
     var control_length = button.clientWidth + bpm_selection.elt.clientWidth
-    button.position(0, this.y+title.elt.clientHeight + rythm_selection.elt.clientHeight*0.55);
-    bpm_selection.position(this.x + button.elt.clientWidth*2 , this.y+title.elt.clientHeight + rythm_selection.elt.clientHeight*1.25)
-    bpm_label.position(this.x+button.elt.clientWidth*2, this.y+title.elt.clientHeight + rythm_selection.elt.clientHeight*1.25-50)
-    note_duration_selection.position(this.x+ button.elt.clientWidth*2 + bpm_selection.elt.clientWidth*1.5, this.y+title.elt.clientHeight + rythm_selection.elt.clientHeight*1.25)
-    dur_label.position(this.x+button.elt.clientWidth*2+bpm_selection.elt.clientWidth*1.5, this.y+title.elt.clientHeight + rythm_selection.elt.clientHeight*1.25-50)
+    button.position(0, this.y);
+    bpm_selection.position(this.x + button.elt.clientWidth*2 , this.y+button.elt.clientHeight*2/3)
+    bpm_label.position(this.x+button.elt.clientWidth*2, this.y+button.elt.clientHeight*2/3-50)
+    note_duration_selection.position(this.x+ button.elt.clientWidth*2 + bpm_selection.elt.clientWidth*1.5, this.y + this.y+button.elt.clientHeight*2/3)
+    dur_label.position(this.x+button.elt.clientWidth*2+bpm_selection.elt.clientWidth*1.5, this.y+this.y+button.elt.clientHeight*2/3-50)
     
 }
 
@@ -101,13 +102,12 @@ function makeplay(){
         phraseContainer.loop();
         phraseContainer.start();
         play = true;    
-        button.elt.innerHTML = "pause";
-        console.log(button)
+        button.elt.innerHTML = "Pause";
    }
    else{
         phraseContainer.stop(0);    
         play = false;
-       button.elt.innerHTML = "play";
+       button.elt.innerHTML = "Play";
    } 
 }
 

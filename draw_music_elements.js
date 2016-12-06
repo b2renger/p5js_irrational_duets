@@ -99,6 +99,7 @@ function DrawNote(val,newNote, arg, offset, c){
     this.offset = offset;
     this.xpos = spacing*9 +(beatCount % (xlimit )) *spacing*5;
     this.ypos = this.offset  + (spacing*4) - notes2position[interval2notes[newNote]]*spacing;
+   // console.log("note2pos : " +notes2position[interval2notes[newNote]] )
     //this.val = val;
     this.arg = arg; 
 }
@@ -144,9 +145,23 @@ DrawNote.prototype.draw = function (){
             //text(interval2notes[newNote], this.xpos , ypos+50);
         }
         
-        if (notes2position[interval2notes[this.newNote]] == -4/2 || notes2position[interval2notes[this.newNote]] == -2/2
-            || notes2position[interval2notes[this.newNote]] == -6/2  || notes2position[interval2notes[this.newNote]] == -8/2 ){
+        if (notes2position[interval2notes[this.newNote]] == 10/2 || notes2position[interval2notes[this.newNote]] == -1/2   ){
             scribble.scribbleLine(this.xpos - 15 , this.ypos , this.xpos + 15 , this.ypos)
+        }
+         if (notes2position[interval2notes[this.newNote]] == 12/2  ){
+            scribble.scribbleLine(this.xpos - 15 , this.ypos , this.xpos + 15 , this.ypos)
+            scribble.scribbleLine(this.xpos - 15 , this.ypos+spacing , this.xpos + 15 , this.ypos +spacing)
+        }
+        if (notes2position[interval2notes[this.newNote]] == 14/2  ){
+            scribble.scribbleLine(this.xpos - 15 , this.ypos , this.xpos + 15 , this.ypos)
+            scribble.scribbleLine(this.xpos - 15 , this.ypos+spacing , this.xpos + 15 , this.ypos +spacing)
+            scribble.scribbleLine(this.xpos - 15 , this.ypos+spacing*2 , this.xpos + 15 , this.ypos +spacing*2)
+        }
+         if (notes2position[interval2notes[this.newNote]] == 16/2  ){
+            scribble.scribbleLine(this.xpos - 15 , this.ypos , this.xpos + 15 , this.ypos)
+            scribble.scribbleLine(this.xpos - 15 , this.ypos+spacing , this.xpos + 15 , this.ypos +spacing)
+            scribble.scribbleLine(this.xpos - 15 , this.ypos+spacing*2 , this.xpos + 15 , this.ypos +spacing*2)
+            scribble.scribbleLine(this.xpos - 15 , this.ypos+spacing*3 , this.xpos + 15 , this.ypos +spacing*3)
         }
 }
 
