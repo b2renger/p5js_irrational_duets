@@ -14,7 +14,7 @@ function DrawBackGraphics(offset){
 
 DrawBackGraphics.prototype.drawStave = function(){
     var tempOffset = this.offset;
-     for (var i = 0 ; i < 2*2 ; i++){
+     for (var i = 0 ; i < ylimit*2 ; i++){
         this.drawLines(tempOffset,spacing);   
         tempOffset +=  spacing * (5+5); // 2 times a full height (there's five lines)
 

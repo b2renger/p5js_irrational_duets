@@ -1,4 +1,4 @@
-
+// aérer un peu les menus et faire que l'offset de dessin dépende de la taille des éléments dom
 // ajouter elements  - selection de preset mode simple - selection de preset mode avancé ou un gros bouton "generate new arrangement
 // affichage de la signature rythmique 4/4 et 3/4 ?
 // travailler les rythmes proposés ne pas hésiter à aller vers des trucs chelous) et faire des choix
@@ -34,7 +34,7 @@ var scribble = new Scribble();
 var seed;
 
 // graphics boundary parameters
-var offset = 300; // will move
+var offset = 250; // will move
 var anchor = offset; // will stay the same
 var spacing = 16;
 var xlimit;
@@ -68,8 +68,9 @@ function setup(){
     phraseContainer.setBPM(bpm);
     phraseContainer.addPhrase(pulse);
 
-    ylimit = int((windowHeight)/(spacing*(20)));
+    ylimit = int((windowHeight)/(spacing*(25)));
     xlimit = int((windowWidth-(spacing*5)) / (spacing*5));
+
     console.log(xlimit,ylimit)
 
     notes = [];
@@ -123,7 +124,7 @@ function draw(){
     background(206,190,190)
     randomSeed(seed);
 
-    console.log(amplitude.getLevel())
+    //console.log(amplitude.getLevel())
     scribble.bowing = amplitude.getLevel()+1;
     scribble.roughness = amplitude.getLevel()+1 ;
     scribble.maxOffset =  amplitude.getLevel()+1;
@@ -282,8 +283,9 @@ function windowResized() {
 
     seed = random(500);
     offset = anchor;
-    ylimit = int((windowHeight)/(spacing*(20)));
+    ylimit = int((windowHeight)/(spacing*(25)));
     xlimit = int((windowWidth-(spacing*5)) / (spacing*5));
+
     console.log(xlimit,ylimit)
 
     backGraphics = new DrawBackGraphics(offset);

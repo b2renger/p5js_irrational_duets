@@ -86,11 +86,11 @@ Gui.prototype.resize = function(x,y,w,h){
     scale_selection.position(this.w/2 -sub_length/2+ rythm_selection.elt.clientWidth + lead_selection.elt.clientWidth + bass_selection.elt.clientWidth +15,          this.y+title.elt.clientHeight*.75);
     // play instructions
     var control_length = button.clientWidth + bpm_selection.elt.clientWidth
-    button.position(0, this.y);
-    bpm_selection.position(this.x + button.elt.clientWidth*2 , this.y+button.elt.clientHeight*2/3)
-    bpm_label.position(this.x+button.elt.clientWidth*2, this.y+button.elt.clientHeight*2/3-50)
-    note_duration_selection.position(this.x+ button.elt.clientWidth*2 + bpm_selection.elt.clientWidth*1.5, this.y + this.y+button.elt.clientHeight*2/3)
-    dur_label.position(this.x+button.elt.clientWidth*2+bpm_selection.elt.clientWidth*1.5, this.y+this.y+button.elt.clientHeight*2/3-50)
+    button.position(0, this.y + title.elt.clientHeight + lead_selection.elt.clientHeight);
+    bpm_selection.position(this.x + button.elt.clientWidth*2 , this.y+button.elt.clientHeight*2/3 + title.elt.clientHeight + lead_selection.elt.clientHeight)
+    bpm_label.position(this.x+button.elt.clientWidth*2, this.y+button.elt.clientHeight*2/3-50 + title.elt.clientHeight + lead_selection.elt.clientHeight)
+    note_duration_selection.position(this.x+ button.elt.clientWidth*2 + bpm_selection.elt.clientWidth*1.5, this.y + this.y+button.elt.clientHeight*2/3 +title.elt.clientHeight + lead_selection.elt.clientHeight)
+    dur_label.position(this.x+button.elt.clientWidth*2+bpm_selection.elt.clientWidth*1.5, this.y+this.y+button.elt.clientHeight*2/3-50+title.elt.clientHeight + lead_selection.elt.clientHeight)
     
 }
 
