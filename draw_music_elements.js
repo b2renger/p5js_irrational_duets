@@ -14,9 +14,10 @@ function DrawBackGraphics(offset){
 
 DrawBackGraphics.prototype.drawStave = function(){
     var tempOffset = this.offset;
-     for (var i = 0 ; i < ylimit*2 ; i++){
+     for (var i = 0 ; i < 2*2 ; i++){
         this.drawLines(tempOffset,spacing);   
-        tempOffset += spacing * (5+5); // 2 times a full height (there's five lines)
+        tempOffset +=  spacing * (5+5); // 2 times a full height (there's five lines)
+
     }
 }
 
@@ -41,7 +42,7 @@ DrawBackGraphics.prototype.drawTrebbleClef = function (anchor){
     noFill();
     stroke(0);
     strokeWeight(10);
-    translate(0,anchor-spacing*2.5)
+    translate(0,anchor-spacing*3.5)
     scale(0.3,0.3)
     //treble clef based on : https://www.khanacademy.org/computer-programming/treble/5306378526654464
     // treble clef - top right curve

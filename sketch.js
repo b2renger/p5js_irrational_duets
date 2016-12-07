@@ -34,9 +34,9 @@ var scribble = new Scribble();
 var seed;
 
 // graphics boundary parameters
-var offset = 200; // will move
+var offset = 300; // will move
 var anchor = offset; // will stay the same
-var spacing = 14;
+var spacing = 16;
 var xlimit;
 var ylimit;
 
