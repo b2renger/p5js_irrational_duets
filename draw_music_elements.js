@@ -42,7 +42,7 @@ DrawBackGraphics.prototype.drawTrebbleClef = function (anchor){
     noFill();
     stroke(0);
     strokeWeight(10);
-    translate(0,anchor-spacing*3.5)
+    translate(0,anchor-spacing*2)
     scale(0.3,0.3)
     //treble clef based on : https://www.khanacademy.org/computer-programming/treble/5306378526654464
     // treble clef - top right curve
