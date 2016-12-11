@@ -45,6 +45,8 @@ function Gui(x,y,w,h){
     scale_selection.option('in C Diminished');
     scale_selection.option('in C Pentatonic');
     scale_selection.option('in C In-Sen');
+    scale_selection.option('in C Octatonic');
+    scale_selection.option('in C Nonatonic');
     scale_selection.changed(apply_scale);
 
     bpm_selection = createSlider(20,160, 90);
