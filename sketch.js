@@ -2,14 +2,14 @@
 // un gros bouton "generate new" arrangement
 // affichage de la signature rythmique 4/4 et 3/4
 // sélection de la tonalité et de la gamme
-// travailler les rythmes proposés ne pas hésiter à aller vers des trucs chelous) et faire des choix
+// travailler les rythmes proposés  ne pas hésiter à aller vers des trucs chelous) et faire des choix
 // css checkbox et positionnement dans l'interface
 
 
 var ctx ;
 var play = false;
 
-var current_number = pi;
+var current_number = test;
 var index =0; // track which decimal we are on
 var stopIndexVal = 8677; // to loop
 
@@ -21,8 +21,9 @@ var phraseContainer; //
 var pulse;
 var beatCount = 0; // musical beat
 var barCount =0; // musical bars
+var current_tone = 0;
 var current_rythm = "Unisson Walk"; // pulse Incr function
-var current_scale = 0; // see utils it's linear
+var current_scale = 0; // see utils, it's "linear"
 var soundBass = "acoustic_guitar_nylon"
 var soundLead = "acoustic_guitar_nylon";
 // audio analyser
@@ -245,7 +246,7 @@ function leadPlay(time,arg,index){
         }
         else{   
             var value = current_number[index];
-            var newNote = int(scales[current_scale][value]) + 12;
+            var newNote = int(scales[current_scale][value]) + current_tone;
             var noteName = interval2notes[(int(newNote))]
             lead.then(function(inst){
                  inst.play(noteName,0,{ duration: noteDur*(arg.length)*sust});
@@ -264,7 +265,7 @@ function bassPlay(time,arg,index){
     else{   
         var value = current_number[index];
         //console.log("bass value : "+value)
-        var newNote = scales[current_scale][value];
+        var newNote = scales[current_scale][value]+current_tone;
         //console.log("bass scale value : "+newNote)
         var noteName =interval2notes[(int(newNote))]
         //console.log("bass noteName : "+noteName)

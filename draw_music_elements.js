@@ -147,7 +147,7 @@ DrawNote.prototype.draw = function (){
         }
         
         // below and above stave elements
-        if (notes2position[interval2notes[this.newNote]] == 10/2 || notes2position[interval2notes[this.newNote]] == -1/2   ){
+        if (notes2position[interval2notes[this.newNote]] == 10/2 || notes2position[interval2notes[this.newNote]] == -2/2   ){
             scribble.scribbleLine(this.xpos - 15 , this.ypos , this.xpos + 15 , this.ypos)
         }
          if (notes2position[interval2notes[this.newNote]] == 12/2  ){

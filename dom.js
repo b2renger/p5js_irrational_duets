@@ -34,19 +34,34 @@ function Gui(x,y,w,h){
     }
     bass_selection.changed(change_bass);
 
+    tone_selection = createSelect()
+    tone_selection.option('in C');
+    tone_selection.option('in C#');
+    tone_selection.option('in D');
+    tone_selection.option('in Eb');
+    tone_selection.option('in E');
+    tone_selection.option('in F');
+    tone_selection.option('in F#');
+    tone_selection.option('in G');
+    tone_selection.option('in G#');
+    tone_selection.option('in A');
+    tone_selection.option('in Bb');
+    tone_selection.option('in B');
+    tone_selection.changed(change_tone);
+
     scale_selection = createSelect()
-    scale_selection.option('in C Linear');
-    scale_selection.option('in C Major');
-    scale_selection.option('in C minor');
-    scale_selection.option('in C Harmonic minor');
-    scale_selection.option('in C Lydian dominant');
-    scale_selection.option('in C Chromatic');
-    scale_selection.option('in C Whole Tones');
-    scale_selection.option('in C Diminished');
-    scale_selection.option('in C Pentatonic');
-    scale_selection.option('in C In-Sen');
-    scale_selection.option('in C Octatonic');
-    scale_selection.option('in C Nonatonic');
+    scale_selection.option('Linear');
+    scale_selection.option('Major');
+    scale_selection.option('minor');
+    scale_selection.option('Harmonic minor');
+    scale_selection.option('Lydian dominant');
+    scale_selection.option('Chromatic');
+    scale_selection.option('Whole Tones');
+    scale_selection.option('Diminished');
+    scale_selection.option('Pentatonic');
+    scale_selection.option('In-Sen');
+    scale_selection.option('Octatonic');
+    scale_selection.option('Nonatonic');
     scale_selection.changed(apply_scale);
 
     bpm_selection = createSlider(20,160, 90);
@@ -106,11 +121,12 @@ Gui.prototype.resize = function(x,y,w,h){
     var titleH = title.elt.clientHeight;
     title.position(this.w/2 - titleW/2  , this.y - titleH/2 );
     // substitcle
-    var sub_length = rythm_selection.elt.clientWidth + lead_selection.elt.clientWidth + bass_selection.elt.clientWidth + scale_selection.elt.clientWidth;
+    var sub_length = rythm_selection.elt.clientWidth + lead_selection.elt.clientWidth + bass_selection.elt.clientWidth + scale_selection.elt.clientWidth + tone_selection.elt.clientWidth;
     rythm_selection.position(this.w/2 -sub_length/2, this.y+title.elt.clientHeight*0.75);
     lead_selection.position(this.w/2 -sub_length/2 + rythm_selection.elt.clientWidth +5 ,this.y+title.elt.clientHeight*.75);
     bass_selection.position(this.w/2-sub_length/2	+ rythm_selection.elt.clientWidth + lead_selection.elt.clientWidth +10, this.y+title.elt.clientHeight*.75);
-    scale_selection.position(this.w/2 -sub_length/2+ rythm_selection.elt.clientWidth + lead_selection.elt.clientWidth + bass_selection.elt.clientWidth +15,          this.y+title.elt.clientHeight*.75);
+    tone_selection.position(this.w/2 -sub_length/2+ rythm_selection.elt.clientWidth + lead_selection.elt.clientWidth + bass_selection.elt.clientWidth +15,          this.y+title.elt.clientHeight*.75);
+    scale_selection.position(this.w/2 -sub_length/2+ rythm_selection.elt.clientWidth + lead_selection.elt.clientWidth + bass_selection.elt.clientWidth +tone_selection.elt.clientWidth + 20 ,          this.y+title.elt.clientHeight*.75);
     // play instructions
     var control_length = button.clientWidth + bpm_selection.elt.clientWidth
     button.position(0, this.y + title.elt.clientHeight + lead_selection.elt.clientHeight);
@@ -149,6 +165,11 @@ function makeplay(){
 function apply_rythm(){
 	current_rythm = rythm_selection.value();
 }
+
+function change_tone(){
+    current_tone = tone_selection.elt.selectedIndex
+}
+
 
 function apply_scale(){
     current_scale = scale_selection.elt.selectedIndex
