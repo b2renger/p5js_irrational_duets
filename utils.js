@@ -39,16 +39,18 @@ var scales = [
 var scales = [
     //https://en.wikipedia.org/wiki/Octatonic_scale
     //http://www.pianoscales.org/nine-tone.html
-   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], //"linear"
-   [0, 2, 4, 5, 7, 9, 11, 12, 14, 16], //   "major" 
-   [0, 1, 4, 5, 7, 8, 11, 12, 13, 16], // "minor" 
-   [0, 2, 3, 5, 7, 8, 11, 12, 14, 15], //  "harmonic_minor" 
-   [0, 2, 4, 6, 7, 9, 10, 12, 14, 16], // "lydian dominant" 
-   [0, 2, 3, 4, 5, 6, 7, 9, 10, 11], //  "chromatic_blues"
-   [0, 2, 4, 6, 8, 10, 12, 14, 16, 18], //   "whole_tones"
-   [0, 2, 3, 5, 6, 8, 9, 11, 12, 14], //"diminished"
-   [0, 2 ,3, 4, 7, 8, 9, 12, 14, 15], //  "pentatonic_blues"
-   [0, 2, 3, 7, 9,10, 12,14,15,19,21,22] // "in-sen"
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], //"linear"
+    [0, 2, 4, 5, 7, 9, 11, 12, 14, 16], //   "major"
+    [0, 1, 4, 5, 7, 8, 11, 12, 13, 16], // "minor"
+    [0, 2, 3, 5, 7, 8, 11, 12, 14, 15], //  "harmonic_minor"
+    [0, 2, 4, 6, 7, 9, 10, 12, 14, 16], // "lydian dominant"
+    [0, 2, 3, 4, 5, 6, 7, 9, 10, 11], //  "chromatic_blues"
+    [0, 2, 4, 6, 8, 10, 12, 14, 16, 18], //   "whole_tones"
+    [0, 2, 3, 5, 6, 8, 9, 11, 12, 14], //"diminished"
+    [0, 2 ,3, 4, 7, 8, 9, 12, 14, 15], //  "pentatonic_blues"
+    [0, 2, 3, 7, 9,10, 12,14,15,19,21,22], // "in-sen"
+    [0, 1, 3, 4, 6, 7, 9, 12 , 13, 15], // octactonic
+    [0, 2, 3, 4, 6, 7, 8, 9, 11, 12] // nonatonic
 ]
 
 var interval2notes = {
