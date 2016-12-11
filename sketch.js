@@ -1,11 +1,9 @@
-// aérer un peu les menus et faire que l'offset de dessin dépende de la taille des éléments dom
-// ajouter elements  - selection de preset mode simple - selection de preset mode avancé ou un gros bouton "generate new arrangement
-// affichage de la signature rythmique 4/4 et 3/4 ?
+
+// un gros bouton "generate new" arrangement
+// affichage de la signature rythmique 4/4 et 3/4
+// sélection de la tonalité et de la gamme
 // travailler les rythmes proposés ne pas hésiter à aller vers des trucs chelous) et faire des choix
-// réfléchir à l'usage des gammes : passer sur des transpositions ?
-// permettre de boucler entre deux index ? de sauter à un index
-// option pour afficher les valeurs numériques des notes ou légende avec les couleurs suffisante ?
-// afficher index courant ? / valeurs de pi ? / nom des notes ?
+// css checkbox et positionnement dans l'interface
 
 
 var ctx ;
@@ -13,6 +11,7 @@ var play = false;
 
 var current_number = pi;
 var index =0; // track which decimal we are on
+var stopIndexVal = 8677; // to loop
 
 // music stuff
 var bpm = 45 ;
@@ -32,6 +31,7 @@ var amplitude;
 // drawing lib
 var scribble = new Scribble();
 var seed;
+var drawPi =  false;
 
 // graphics boundary parameters
 var offset = 250; // will move
@@ -42,6 +42,7 @@ var ylimit;
 
 var backGraphics; // draw some musical elements
 var gui; // dom elements see dom.js
+
 // arrays to hold musical elements drawn
 var notes;
 var bassnotes;
@@ -54,6 +55,7 @@ function preload(){
     ctx = getAudioContext();
     lead = Soundfont.instrument(ctx,soundLead);
     bass = Soundfont.instrument(ctx,soundBass);
+    font = loadFont("assets/HomemadeApple.ttf")
 }
 
 
@@ -103,7 +105,9 @@ function setup(){
 
     
     bars.push(new DrawBars(offset))
-    bars.push(new DrawBars(offset+spacing*10))    
+    bars.push(new DrawBars(offset+spacing*10))
+
+    textFont(font)
     
     /*
     ugly hack ! to make the gui get the right position after a refresh
@@ -146,6 +150,13 @@ function draw(){
     for (var i = 0 ; i < bassnotes.length ; i++)    {
          bassnotes[i].draw();
     }
+
+    strokeWeight(1);
+    fill(0)
+    textSize(20)
+    text("index : " + index, 5, windowHeight-65)
+    text("pi value : " + pi[index], 5, windowHeight-35)
+    text("note name : " + interval2notes[pi[index]].toLocaleLowerCase(), 5, windowHeight-5)
 }
 
 function pulseIncr(){
@@ -221,6 +232,11 @@ function pulseIncr(){
         
     }
     beatCount+=1;
+
+    if (index >= startIndex.value()+stopIndexVal){
+        index = startIndex.value()
+    }
+
 }
 
 function leadPlay(time,arg,index){    
@@ -237,8 +253,7 @@ function leadPlay(time,arg,index){
             //console.log("lead : " + noteDur*(arg.length)*sust)
             index +=1;
             notes.push(new DrawNote(value,newNote,arg, offset, color(0)));
-        }     
-
+        }
 }
 
 
@@ -285,7 +300,6 @@ function windowResized() {
     offset = anchor;
     ylimit = int((windowHeight)/(spacing*(25)));
     xlimit = int((windowWidth-(spacing*5)) / (spacing*5));
-
     console.log(xlimit,ylimit)
 
     backGraphics = new DrawBackGraphics(offset);

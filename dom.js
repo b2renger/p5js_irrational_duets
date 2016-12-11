@@ -67,6 +67,31 @@ function Gui(x,y,w,h){
       sust = note_duration_selection.value()/50
     })
     
+    startIndex = createSlider(0, 8600, 0);
+    startIndex_label = createP("start at index : "+startIndex.value()+"")
+    startIndex_label.style("z-index :-1; font-size : 20px  ")
+    startIndex.mouseClicked(function(){
+      startIndex_label.elt.innerText = " start at index : " +startIndex.value() +" ";
+        index = startIndex.value()
+      //sust = note_duration_selection.value()/50
+    })
+
+    stopIndex = createSelect()
+    stopIndex.option('no loop');
+    stopIndex.option('loop after 8 digits');
+    stopIndex.option('loop after 16 digits');
+    stopIndex.option('loop after 32 digits');
+    stopIndex.option('loop after 64 digits');
+    stopIndex.option('loop after 128 digits');
+    stopIndex.option('loop after 256 digits');
+    stopIndex.option('loop after 512 digits');
+    stopIndex.option('loop after 1024 digits');
+    stopIndex.option('loop after 2048 digits');
+    stopIndex.option('loop after 4096 digits');
+    stopIndex.changed(stopIndexChanged);
+
+    checkbox = createCheckbox('draw pi', false);
+    checkbox.changed(check_changed);
 }
 
 Gui.prototype.resize = function(x,y,w,h){
@@ -87,11 +112,18 @@ Gui.prototype.resize = function(x,y,w,h){
     // play instructions
     var control_length = button.clientWidth + bpm_selection.elt.clientWidth
     button.position(0, this.y + title.elt.clientHeight + lead_selection.elt.clientHeight);
+
     bpm_selection.position(this.x + button.elt.clientWidth*2 , this.y+button.elt.clientHeight*2/3 + title.elt.clientHeight + lead_selection.elt.clientHeight)
     bpm_label.position(this.x+button.elt.clientWidth*2, this.y+button.elt.clientHeight*2/3-50 + title.elt.clientHeight + lead_selection.elt.clientHeight)
+
     note_duration_selection.position(this.x+ button.elt.clientWidth*2 + bpm_selection.elt.clientWidth*1.5, this.y + this.y+button.elt.clientHeight*2/3 +title.elt.clientHeight + lead_selection.elt.clientHeight)
     dur_label.position(this.x+button.elt.clientWidth*2+bpm_selection.elt.clientWidth*1.5, this.y+this.y+button.elt.clientHeight*2/3-50+title.elt.clientHeight + lead_selection.elt.clientHeight)
     
+    startIndex.position(this.x+ button.elt.clientWidth*2 + bpm_selection.elt.clientWidth*1.5 + note_duration_selection.elt.clientWidth*1.5, this.y + this.y+button.elt.clientHeight*2/3 +title.elt.clientHeight + lead_selection.elt.clientHeight)
+    startIndex_label.position(this.x+ button.elt.clientWidth*2 + bpm_selection.elt.clientWidth*1.5 + note_duration_selection.elt.clientWidth*1.5, this.y+this.y+button.elt.clientHeight*2/3-50+title.elt.clientHeight + lead_selection.elt.clientHeight)
+
+    stopIndex.position(this.x+ button.elt.clientWidth*2 + bpm_selection.elt.clientWidth*1.5 + note_duration_selection.elt.clientWidth*1.5 + startIndex.elt.clientWidth*1.5, this.y + this.y+button.elt.clientHeight*2/3 +title.elt.clientHeight*.75 + lead_selection.elt.clientHeight)
+
 }
 
 
@@ -138,6 +170,20 @@ function change_lead(){
     });  
 }
 
+function check_changed(){
+    drawPi = !drawPi
+}
+
+function stopIndexChanged(){
+    if(stopIndex.value() == "no loop"){
+        stopIndexVal = 8677;
+    }
+    else {
+        var val = stopIndex.value().split("loop after ")[1].split(" digits")[0] // arg ! get the number in the option string
+        stopIndexVal = val;
+    }
+    console.log(stopIndexVal)
+}
 
 function apply_preset(){
 

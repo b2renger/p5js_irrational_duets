@@ -96,7 +96,7 @@ DrawBars.prototype.draw = function() {
 function DrawNote(val,newNote, arg, offset, c){
     this.c = color(synesthesisTable[val]);
     this.newNote = newNote;
-
+    this.val = val;
     this.offset = offset;
     this.xpos = spacing*9 +(beatCount % (xlimit )) *spacing*5;
     this.ypos = this.offset  + (spacing*4) - notes2position[interval2notes[newNote]]*spacing;
@@ -146,6 +146,7 @@ DrawNote.prototype.draw = function (){
             //text(interval2notes[newNote], this.xpos , ypos+50);
         }
         
+        // below and above stave elements
         if (notes2position[interval2notes[this.newNote]] == 10/2 || notes2position[interval2notes[this.newNote]] == -1/2   ){
             scribble.scribbleLine(this.xpos - 15 , this.ypos , this.xpos + 15 , this.ypos)
         }
@@ -163,6 +164,11 @@ DrawNote.prototype.draw = function (){
             scribble.scribbleLine(this.xpos - 15 , this.ypos+spacing , this.xpos + 15 , this.ypos +spacing)
             scribble.scribbleLine(this.xpos - 15 , this.ypos+spacing*2 , this.xpos + 15 , this.ypos +spacing*2)
             scribble.scribbleLine(this.xpos - 15 , this.ypos+spacing*3 , this.xpos + 15 , this.ypos +spacing*3)
+        }
+
+        if (drawPi) {
+            textSize(24)
+            text(this.val, this.xpos, this.offset + 125)
         }
 }
 

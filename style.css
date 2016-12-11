@@ -20,7 +20,7 @@ input[type=range] {
     -moz-appearance: none;
     background-color: white;
     cursor: pointer;
-    width: 150px;
+    width: 125px;
     height: 6px;
     opacity: 0.75;
     box-shadow: 5px 5px 5px #888888;
