@@ -44,12 +44,11 @@ var scales = [
    [0, 1, 4, 5, 7, 8, 11, 12, 13, 16], // "minor" 
    [0, 2, 3, 5, 7, 8, 11, 12, 14, 15], //  "harmonic_minor" 
    [0, 2, 4, 6, 7, 9, 10, 12, 14, 16], // "lydian dominant" 
-   [ 0, 2, 3, 4, 5, 6, 7, 9, 10, 11], //  "chromatic_blues" 
-   [ 0, 2, 4, 6, 8, 10, 12, 14, 16, 18], //   "whole_tones"
-   [ 0, 2, 3, 5, 6, 8, 9, 11, 12, 14], //"diminished" 
+   [0, 2, 3, 4, 5, 6, 7, 9, 10, 11], //  "chromatic_blues"
+   [0, 2, 4, 6, 8, 10, 12, 14, 16, 18], //   "whole_tones"
+   [0, 2, 3, 5, 6, 8, 9, 11, 12, 14], //"diminished"
    [0, 2 ,3, 4, 7, 8, 9, 12, 14, 15], //  "pentatonic_blues"
    [0, 2, 3, 7, 9,10, 12,14,15,19,21,22] // "in-sen"
-
 ]
 
 var interval2notes = {
@@ -192,13 +191,13 @@ var instrumentTable = [
     "agogo",
     "alto_sax",
     "applause",
-    "bagpipe",
+    //"bagpipe", // doesn't work
     "banjo",
     "baritone_sax",
     "bassoon",
     "bird_tweet",
     "blown_bottle",
-    //"brass_section",
+    "brass_section",
     "breath_noise",
     "bright_acoustic_piano",
     "celesta",
@@ -206,26 +205,26 @@ var instrumentTable = [
     "choir_aahs",
     "church_organ",
     "clarinet",
-    "clavinet",
-    //"contrabass",
+    //"clavinet", // doesn't work
+    "contrabass",
     "distortion_guitar",
     "drawbar_organ",
     "dulcimer",
-    //"electric_bass_finger",
-    //"electric_bass_pick",
+    "electric_bass_finger",
+    "electric_bass_pick",
    	"electric_grand_piano",
     "electric_guitar_clean",
     "electric_guitar_jazz",
     "electric_guitar_muted",
     "electric_piano_1",
     "electric_piano_2",
-    //"english_horn",
+    "english_horn",
     "fiddle",
     "flute",
     "french_horn",
     "fretless_bass",
-    //"fx_1_rain",
-    //"fx_2_soundtrack",
+    "fx_1_rain",
+    "fx_2_soundtrack",
     "fx_3_crystal",
     "fx_4_atmosphere",
     "fx_5_brightness",
@@ -249,7 +248,7 @@ var instrumentTable = [
     "lead_5_charang",
     "lead_6_voice",
     "lead_7_fifths",
-    "lead_8_bass__lead",
+    //"lead_8_bass__lead", // doesn't work
     "marimba",
     "melodic_tom",
     "music_box",
@@ -273,9 +272,9 @@ var instrumentTable = [
     "pizzicato_strings",
     "recorder",
     "reed_organ",
-    "reverse_cymbal",
+    //"reverse_cymbal",
     "rock_organ",
-    "seashore",
+    //"seashore",
     "shakuhachi",
     "shamisen",
     "shanai",
@@ -288,13 +287,13 @@ var instrumentTable = [
     "string_ensemble_2",
     "synth_bass_1",
     "synth_bass_2",
-    "synth_brass_1",
-    "synth_brass_2",
-    "synth_choir",
-    "synth_drum",
-    "synth_strings_1",
-    "synth_strings_2",
-    "taiko_drum",
+    //"synth_brass_1", // doesn't work
+    //"synth_brass_2", // doesn't work
+    //"synth_choir", // doesn't work
+    //"synth_drum",
+    //"synth_strings_1", // doesn't work
+    //"synth_strings_2", // doesn't work
+    //"taiko_drum",
     "tango_accordion",
     "telephone_ring",
     "tenor_sax",
