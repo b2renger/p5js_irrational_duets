@@ -1,9 +1,12 @@
-
-// un gros bouton "generate new" arrangement
+// faire une autre page pour les sequences des fibonnacci ? à partir d'iteration 17 on a des patterns de 4 temps / 36 huit temps // http://stackoverflow.com/questions/7944239/generating-fibonacci-sequence
+// change start index slider to an Input field, maybe with a tooltip ?
+// add other loop options
+// add select for numbers (Pi phi linearsequence fibonaccisequence)
+// add slider to control drawing distortion
+// add tooltip for title with an explanation
 // affichage de la signature rythmique 4/4 et 3/4
-// sélection de la tonalité et de la gamme
-// travailler les rythmes proposés  ne pas hésiter à aller vers des trucs chelous) et faire des choix
-// css checkbox et positionnement dans l'interface
+// travailler les rythmes proposés : créer plusieurs impromptus et des variation sur les canons
+
 
 
 var ctx ;
@@ -35,7 +38,7 @@ var seed;
 var drawPi =  false;
 
 // graphics boundary parameters
-var offset = 250; // will move
+var offset = 300; // will move
 var anchor = offset; // will stay the same
 var spacing = 16;
 var xlimit;
@@ -137,7 +140,6 @@ function draw(){
     backGraphics.drawStave();
     backGraphics.drawTrebbleClef(anchor);
     backGraphics.drawTrebbleClef(anchor+spacing*10);
- 
    
     for (var i = 0 ; i < pauses.length ; i++){
          pauses[i].draw();
@@ -154,9 +156,10 @@ function draw(){
 
     strokeWeight(1);
     fill(0)
+    stroke(0)
     textSize(20)
-    text("index : " + index, 5, windowHeight-65)
-    text("pi value : " + pi[index], 5, windowHeight-35)
+    text("sequence index : " + index, 5, windowHeight-65)
+    text("sequence value : " + pi[index], 5, windowHeight-35)
     text("note name : " + interval2notes[pi[index]].toLocaleLowerCase(), 5, windowHeight-5)
 }
 

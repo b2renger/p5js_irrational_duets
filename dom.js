@@ -9,11 +9,19 @@ function Gui(x,y,w,h){
 	this.w = w;
 	this.h = h;
 
-    button = createButton('play');
-    button.mousePressed(makeplay);
-    
     title = createP("Irrational   Duets")
+    title_tooltip = createDiv('<div class="tooltip">? <span class="tooltiptext">This is an experiment exploring the transposition of mathematical sequences of number to music. </span></div>');
     
+    number_selection = createSelect()
+    number_selection.option('-- Pi');
+    number_selection.option('-- Phi');
+    number_selection.option('-- Fibonacci');
+    number_selection.option('-- Linear');
+    number_selection.changed(apply_number);
+    number_selection.style("font-size : 35px;height: 75px;line-height: 75px;	")
+
+
+    // subtitle elements
     rythm_selection = createSelect()
     rythm_selection.option('Unisson Walk');
     rythm_selection.option('Dialog');
@@ -64,6 +72,12 @@ function Gui(x,y,w,h){
     scale_selection.option('Nonatonic');
     scale_selection.changed(apply_scale);
 
+    // control elements
+    button = createButton('play');
+    button.mousePressed(makeplay);
+
+
+
     bpm_selection = createSlider(20,160, 90);
     bpm_label = createP(""+bpm_selection.value()+" bpm")
     bpm_label.style("z-index :-1; font-size : 20px  ")
@@ -76,7 +90,6 @@ function Gui(x,y,w,h){
     })
 
     note_duration_selection = createSlider(0, 150, 25);
-    
     dur_label = createP("legato  "+note_duration_selection.value()/50+"")
     dur_label.style("z-index :-1; font-size : 20px  ")
     note_duration_selection.mouseClicked(function(){
@@ -95,6 +108,7 @@ function Gui(x,y,w,h){
 
     stopIndex = createSelect()
     stopIndex.option('no loop');
+    stopIndex.option('loop after 4 digits');
     stopIndex.option('loop after 8 digits');
     stopIndex.option('loop after 16 digits');
     stopIndex.option('loop after 32 digits');
@@ -107,8 +121,7 @@ function Gui(x,y,w,h){
     stopIndex.option('loop after 4096 digits');
     stopIndex.changed(stopIndexChanged);
 
-    checkbox = createCheckbox('draw pi', false);
-    checkbox.changed(check_changed);
+
 }
 
 Gui.prototype.resize = function(x,y,w,h){
@@ -119,10 +132,14 @@ Gui.prototype.resize = function(x,y,w,h){
     // title
     var titleW = title.elt.clientWidth;
     var titleH = title.elt.clientHeight;
-    title.position(this.w/2 - titleW/2  , this.y - titleH/2 );
+    title.position(this.w/2 - titleW/2 -number_selection.elt.clientWidth/2  , this.y - titleH/2 );
+    number_selection.position(this.w/2 +titleW/2, this.y);
+    title_tooltip.position(this.w/2 + titleW/2 + number_selection.elt.clientWidth  , this.y  );
     // substitcle
     var sub_length = rythm_selection.elt.clientWidth + lead_selection.elt.clientWidth + bass_selection.elt.clientWidth + scale_selection.elt.clientWidth + tone_selection.elt.clientWidth;
+
     rythm_selection.position(this.w/2 -sub_length/2, this.y+title.elt.clientHeight*0.75);
+
     lead_selection.position(this.w/2 -sub_length/2 + rythm_selection.elt.clientWidth +5 ,this.y+title.elt.clientHeight*.75);
     bass_selection.position(this.w/2-sub_length/2	+ rythm_selection.elt.clientWidth + lead_selection.elt.clientWidth +10, this.y+title.elt.clientHeight*.75);
     tone_selection.position(this.w/2 -sub_length/2+ rythm_selection.elt.clientWidth + lead_selection.elt.clientWidth + bass_selection.elt.clientWidth +15,          this.y+title.elt.clientHeight*.75);
@@ -175,6 +192,25 @@ function apply_scale(){
     current_scale = scale_selection.elt.selectedIndex
 }
 
+function apply_number(){
+    var id = number_selection.elt.selectedIndex
+    console.log(id)
+    if (id == 0){
+        current_number = pi
+    }
+    else if (id == 1){
+        current_number = phi
+    }
+    else if (id == 2){
+        current_number = fib
+    }
+    else if (id == 3){
+        current_number = test
+        console.log(current_number)
+    }
+}
+
+
 function change_bass(){
     ctx = getAudioContext();
     var val = bass_selection.value().split("and ");
@@ -193,10 +229,6 @@ function change_lead(){
     });  
 }
 
-function check_changed(){
-    drawPi = !drawPi
-}
-
 function stopIndexChanged(){
     if(stopIndex.value() == "no loop"){
         stopIndexVal = 8677;
@@ -208,6 +240,4 @@ function stopIndexChanged(){
     console.log(stopIndexVal)
 }
 
-function apply_preset(){
 
-}
