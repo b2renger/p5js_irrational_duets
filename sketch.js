@@ -56,7 +56,7 @@ var bars;
 
 document.addEventListener('click', function (event) {
 
-	if (contextLoaded == false) {
+	if (ctxLoaded == false) {
         ctx = getAudioContext();
         lead = Soundfont.instrument(ctx, soundLead);
         bass = Soundfont.instrument(ctx, soundBass);
@@ -76,7 +76,7 @@ document.addEventListener('click', function (event) {
         lead.then(function (inst) {
             inst.connect(amplitude)
         });
-        contextLoaded= true
+        ctxLoaded= true
     }
 
 }, false);
