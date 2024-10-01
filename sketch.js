@@ -54,14 +54,9 @@ var bassnotes;
 var pauses;
 var bars;
 
+document.addEventListener('click', function (event) {
 
-
-function preload() {
-    font = loadFont("assets/HomemadeApple.ttf")
-}
-
-function mousePressed() {
-    if (contextLoaded == false) {
+	if (contextLoaded == false) {
         ctx = getAudioContext();
         lead = Soundfont.instrument(ctx, soundLead);
         bass = Soundfont.instrument(ctx, soundBass);
@@ -81,9 +76,17 @@ function mousePressed() {
         lead.then(function (inst) {
             inst.connect(amplitude)
         });
+        contextLoaded= true
     }
 
+}, false);
+
+
+
+function preload() {
+    font = loadFont("assets/HomemadeApple.ttf")
 }
+
 
 
 function setup() {
