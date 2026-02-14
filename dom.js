@@ -1,24 +1,80 @@
-var bpm_label,bpm_selection
-var title
-var scale_selection
-var button
+/**
+ * DOM.JS - User Interface & Controls
+ *
+ * This file manages all user interface elements and interactions:
+ * - Title and tooltip
+ * - Sequence selector (Pi, Phi, Fibonacci, Linear)
+ * - Rhythm selector
+ * - Instrument selectors (lead & bass)
+ * - Tone (key) selector
+ * - Scale selector
+ * - Play/pause button
+ * - BPM slider
+ * - Legato (sustain) slider
+ * - Start index slider
+ * - Stop index (loop length) selector
+ *
+ * ARCHITECTURE:
+ * - All UI elements created with p5.dom library
+ * - Gui class handles creation and responsive positioning
+ * - Individual callback functions handle user interactions
+ * - Elements positioned dynamically based on window size
+ *
+ * RESPONSIVE DESIGN:
+ * - resize() method recalculates positions when window changes
+ * - Positions based on element widths/heights (client dimensions)
+ * - Currently has setInterval hack for initial positioning (see sketch.js)
+ */
 
+// ============================================================================
+// GLOBAL DOM REFERENCES
+// ============================================================================
+var bpm_label, bpm_selection      // BPM slider and label
+var title                          // Main title heading
+var scale_selection                // Musical scale dropdown
+var button                         // Play/pause button
+
+// ============================================================================
+// GUI CLASS - User Interface Manager
+// ============================================================================
+
+/**
+ * Gui - Creates and manages all user interface controls
+ *
+ * INITIALIZATION:
+ * - Creates all DOM elements (dropdowns, sliders, buttons)
+ * - Sets default values
+ * - Attaches event handlers
+ * - Does NOT position elements (done later in resize())
+ *
+ * POSITIONING:
+ * - All positioning handled in resize() method
+ * - Called on window resize and periodically via setInterval hack
+ *
+ * @param {number} x - Left boundary (currently always 1)
+ * @param {number} y - Top boundary (currently always 1)
+ * @param {number} w - Width (window width)
+ * @param {number} h - Height (window height)
+ */
 function Gui(x,y,w,h){
-	this.x = x; 
+	this.x = x;
 	this.y = y;
 	this.w = w;
 	this.h = h;
 
-    title = createP("Irrational   Duets")
+    // Title - large and centered like a piece title
+    title = createP("Irrational Duets")
+    title.id('title-main');
     title_tooltip = createDiv('<div class="tooltip">? <span class="tooltiptext">This is an experiment exploring the transposition of mathematical sequences of number to music. </span></div>');
-    
+
+    // Sequence selector - prominent like a piece name
     number_selection = createSelect()
-    number_selection.option('-- Pi');
-    number_selection.option('-- Phi');
-    number_selection.option('-- Fibonacci');
-    number_selection.option('-- Linear');
+    number_selection.id('sequence-select');
+    number_selection.option('Pi');
+    number_selection.option('Phi');
+    number_selection.option('Fibonacci');
+    number_selection.option('Linear');
     number_selection.changed(apply_number);
-    number_selection.style("font-size : 35px;height: 75px;line-height: 75px;	")
 
 
     // subtitle elements
@@ -78,32 +134,32 @@ function Gui(x,y,w,h){
 
 
 
-    bpm_selection = createSlider(20,160, 90);
-    bpm_label = createP(""+bpm_selection.value()+" bpm")
-    bpm_label.style("z-index :-1; font-size : 20px  ")
+    bpm_selection = createSlider(20,160, 45);  // Default to 45 BPM (matches sketch.js)
+    bpm_label = createP("♩ = "+bpm_selection.value())
+    bpm_label.style("z-index:-1; font-size:16px; font-weight:400; margin:0; padding:0;")
     bpm_selection.mouseClicked(function(){
       var newBPM = bpm_selection.value()
-      bpm_label.elt.innerText = " " +newBPM+"  bpm";
+      bpm_label.elt.innerText = "♩ = " + newBPM;
       phraseContainer.setBPM(newBPM);
       noteDur = (60 / (newBPM ))
+      bpm = newBPM;  // Update global bpm variable
       console.log(noteDur)
     })
 
     note_duration_selection = createSlider(0, 150, 25);
-    dur_label = createP("legato  "+note_duration_selection.value()/50+"")
-    dur_label.style("z-index :-1; font-size : 20px  ")
+    dur_label = createP("legato "+note_duration_selection.value()/50+"")
+    dur_label.style("z-index:-1; font-size:16px; font-weight:400; margin:0; padding:0;")
     note_duration_selection.mouseClicked(function(){
-      dur_label.elt.innerText = " legato  " +note_duration_selection.value()/50 +" ";
+      dur_label.elt.innerText = "legato " + note_duration_selection.value()/50;
       sust = note_duration_selection.value()/50
     })
-    
+
     startIndex = createSlider(0, 8600, 0);
-    startIndex_label = createP("start at index : "+startIndex.value()+"")
-    startIndex_label.style("z-index :-1; font-size : 20px  ")
+    startIndex_label = createP("start: "+startIndex.value())
+    startIndex_label.style("z-index:-1; font-size:16px; font-weight:400; margin:0; padding:0;")
     startIndex.mouseClicked(function(){
-      startIndex_label.elt.innerText = " start at index : " +startIndex.value() +" ";
-        index = startIndex.value()
-      //sust = note_duration_selection.value()/50
+      startIndex_label.elt.innerText = "start: " + startIndex.value();
+      index = startIndex.value()
     })
 
     stopIndex = createSelect()
@@ -121,61 +177,141 @@ function Gui(x,y,w,h){
     stopIndex.option('loop after 4096 digits');
     stopIndex.changed(stopIndexChanged);
 
+    // ========================================================================
+    // Set default selections to match initial values in sketch.js
+    // ========================================================================
+    // Pi, Vals (waltz), Harpsichord & Celesta, D minor
+    number_selection.selected('Pi');                 // Pi sequence
+    rythm_selection.selected('Vals');                // 3/4 waltz rhythm
+    lead_selection.selected('for harpsichord');      // Harpsichord (index 7)
+    bass_selection.selected('and celesta');          // Celesta (index 8)
+    tone_selection.selected('in D');                 // D key (index 2)
+    scale_selection.selected('minor');               // Minor scale (index 2)
 
 }
 
 Gui.prototype.resize = function(x,y,w,h){
-    this.x = x; 
+    this.x = x;
 	this.y = y;
 	this.w = w;
 	this.h = h;
-    // title
+
+    var margin = 20;
+    var yPos = this.y + 10;
+
+    // ========================================================================
+    // ROW 1: Title - Centered like a piece title
+    // ========================================================================
     var titleW = title.elt.clientWidth;
     var titleH = title.elt.clientHeight;
-    title.position(this.w/2 - titleW/2 -number_selection.elt.clientWidth/2  , this.y - titleH/2 );
-    number_selection.position(this.w/2 +titleW/2, this.y);
-    title_tooltip.position(this.w/2 + titleW/2 + number_selection.elt.clientWidth  , this.y  );
-    // substitcle
-    var sub_length = rythm_selection.elt.clientWidth + lead_selection.elt.clientWidth + bass_selection.elt.clientWidth + scale_selection.elt.clientWidth + tone_selection.elt.clientWidth;
+    title.position(this.w/2 - titleW/2, yPos);
+    yPos += titleH + 5;
 
-    rythm_selection.position(this.w/2 -sub_length/2, this.y+title.elt.clientHeight*0.75);
+    // ========================================================================
+    // ROW 2: Sequence selector - Centered, prominent
+    // ========================================================================
+    var seqW = number_selection.elt.clientWidth;
+    number_selection.position(this.w/2 - seqW/2, yPos);
+    title_tooltip.position(this.w/2 + seqW/2 + 10, yPos + 5);
+    yPos += number_selection.elt.clientHeight + 15;
 
-    lead_selection.position(this.w/2 -sub_length/2 + rythm_selection.elt.clientWidth +5 ,this.y+title.elt.clientHeight*.75);
-    bass_selection.position(this.w/2-sub_length/2	+ rythm_selection.elt.clientWidth + lead_selection.elt.clientWidth +10, this.y+title.elt.clientHeight*.75);
-    tone_selection.position(this.w/2 -sub_length/2+ rythm_selection.elt.clientWidth + lead_selection.elt.clientWidth + bass_selection.elt.clientWidth +15,          this.y+title.elt.clientHeight*.75);
-    scale_selection.position(this.w/2 -sub_length/2+ rythm_selection.elt.clientWidth + lead_selection.elt.clientWidth + bass_selection.elt.clientWidth +tone_selection.elt.clientWidth + 20 ,          this.y+title.elt.clientHeight*.75);
-    // play instructions
-    var control_length = button.clientWidth + bpm_selection.elt.clientWidth
-    button.position(0, this.y + title.elt.clientHeight + lead_selection.elt.clientHeight);
+    // ========================================================================
+    // ROW 3: Musical parameters - Centered, evenly spaced
+    // Format: [Rhythm] [Lead Instr.] [Bass Instr.] [Key] [Scale]
+    // ========================================================================
+    var spacing = 8;
+    var sub_length = rythm_selection.elt.clientWidth +
+                     lead_selection.elt.clientWidth +
+                     bass_selection.elt.clientWidth +
+                     tone_selection.elt.clientWidth +
+                     scale_selection.elt.clientWidth +
+                     (spacing * 4);
 
-    bpm_selection.position(this.x + button.elt.clientWidth*2 , this.y+button.elt.clientHeight*2/3 + title.elt.clientHeight + lead_selection.elt.clientHeight)
-    bpm_label.position(this.x+button.elt.clientWidth*2, this.y+button.elt.clientHeight*2/3-50 + title.elt.clientHeight + lead_selection.elt.clientHeight)
+    var xPos = this.w/2 - sub_length/2;
 
-    note_duration_selection.position(this.x+ button.elt.clientWidth*2 + bpm_selection.elt.clientWidth*1.5, this.y + this.y+button.elt.clientHeight*2/3 +title.elt.clientHeight + lead_selection.elt.clientHeight)
-    dur_label.position(this.x+button.elt.clientWidth*2+bpm_selection.elt.clientWidth*1.5, this.y+this.y+button.elt.clientHeight*2/3-50+title.elt.clientHeight + lead_selection.elt.clientHeight)
-    
-    startIndex.position(this.x+ button.elt.clientWidth*2 + bpm_selection.elt.clientWidth*1.5 + note_duration_selection.elt.clientWidth*1.5, this.y + this.y+button.elt.clientHeight*2/3 +title.elt.clientHeight + lead_selection.elt.clientHeight)
-    startIndex_label.position(this.x+ button.elt.clientWidth*2 + bpm_selection.elt.clientWidth*1.5 + note_duration_selection.elt.clientWidth*1.5, this.y+this.y+button.elt.clientHeight*2/3-50+title.elt.clientHeight + lead_selection.elt.clientHeight)
+    rythm_selection.position(xPos, yPos);
+    xPos += rythm_selection.elt.clientWidth + spacing;
 
-    stopIndex.position(this.x+ button.elt.clientWidth*2 + bpm_selection.elt.clientWidth*1.5 + note_duration_selection.elt.clientWidth*1.5 + startIndex.elt.clientWidth*1.5, this.y + this.y+button.elt.clientHeight*2/3 +title.elt.clientHeight*.75 + lead_selection.elt.clientHeight)
+    lead_selection.position(xPos, yPos);
+    xPos += lead_selection.elt.clientWidth + spacing;
+
+    bass_selection.position(xPos, yPos);
+    xPos += bass_selection.elt.clientWidth + spacing;
+
+    tone_selection.position(xPos, yPos);
+    xPos += tone_selection.elt.clientWidth + spacing;
+
+    scale_selection.position(xPos, yPos);
+
+    yPos += lead_selection.elt.clientHeight + 20;
+
+    // ========================================================================
+    // ROW 4: Playback controls - Left-aligned with good spacing
+    // Format: [Play] [BPM: slider] [Legato: slider] [Start: slider] [Loop]
+    // ========================================================================
+    xPos = margin;
+
+    button.position(xPos, yPos);
+    xPos += button.elt.clientWidth + 30;
+
+    bpm_label.position(xPos, yPos - 25);
+    bpm_selection.position(xPos, yPos + 10);
+    xPos += bpm_selection.elt.clientWidth + 30;
+
+    dur_label.position(xPos, yPos - 25);
+    note_duration_selection.position(xPos, yPos + 10);
+    xPos += note_duration_selection.elt.clientWidth + 30;
+
+    startIndex_label.position(xPos, yPos - 25);
+    startIndex.position(xPos, yPos + 10);
+    xPos += startIndex.elt.clientWidth + 30;
+
+    stopIndex.position(xPos, yPos + 10);
 
 }
 
 
 
 // play & pause button
+/**
+ * makeplay() - Toggle play/pause state
+ *
+ * SAFETY CHECKS:
+ * - Verifies audio context is loaded before playing
+ * - Prevents playback if audio initialization failed
+ * - Provides user feedback if audio not ready
+ *
+ * CALLED BY: Play/Pause button click event
+ */
 function makeplay(){
+    // Check if audio is ready before attempting to play
     if (!play){
+        // Verify audio context is initialized
+        if (!ctxLoaded) {
+            console.warn('Audio not ready yet. Please wait for instruments to load.');
+            alert('Audio is still loading. Please click anywhere on the page first, then wait a moment before playing.');
+            return;
+        }
+
+        // Check if audio loading failed
+        if (audioLoadError) {
+            console.error('Cannot play: audio loading failed');
+            alert('Cannot play: audio failed to load. Please refresh the page.');
+            return;
+        }
+
+        // Start playback
         phraseContainer.loop();
         phraseContainer.start();
-        play = true;    
+        play = true;
         button.elt.innerHTML = "Pause";
    }
    else{
-        phraseContainer.stop(0);    
+        // Stop playback
+        phraseContainer.stop(0);
         play = false;
        button.elt.innerHTML = "Play";
-   } 
+   }
 }
 
 
@@ -212,21 +348,43 @@ function apply_number(){
 
 
 function change_bass(){
+    if (!ctxLoaded) {
+        alert('Please wait for audio to initialize before changing instruments.');
+        return;
+    }
+
     ctx = getAudioContext();
     var val = bass_selection.value().split("and ");
-    bass = Soundfont.instrument(ctx,val[1]);
+    console.log('Loading new bass instrument:', val[1]);
+
+    bass = Soundfont.instrument(ctx, val[1]);
     bass.then(function(inst){
-        inst.connect(amplitude)
-    });  
+        inst.connect(amplitude);
+        console.log('Bass instrument loaded:', val[1]);
+    }).catch(function(error) {
+        console.error('Failed to load bass instrument:', error);
+        alert('Failed to load bass instrument. Please try again.');
+    });
 }
 
 function change_lead(){
+    if (!ctxLoaded) {
+        alert('Please wait for audio to initialize before changing instruments.');
+        return;
+    }
+
     ctx = getAudioContext();
     var val = lead_selection.value().split("for ");
-    lead = Soundfont.instrument(ctx,val[1]);
+    console.log('Loading new lead instrument:', val[1]);
+
+    lead = Soundfont.instrument(ctx, val[1]);
     lead.then(function(inst){
-        inst.connect(amplitude)
-    });  
+        inst.connect(amplitude);
+        console.log('Lead instrument loaded:', val[1]);
+    }).catch(function(error) {
+        console.error('Failed to load lead instrument:', error);
+        alert('Failed to load lead instrument. Please try again.');
+    });
 }
 
 function stopIndexChanged(){

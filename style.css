@@ -1,38 +1,69 @@
 canvas { position:fixed; top:0; left:0; z-index:-1; }
 
+/* Main container for better organization */
+body {
+    font-family: 'Kalam', 'Homemade Apple', cursive;
+}
+
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     -moz-appearance: none;
     cursor: pointer;
-    border: 0px;
+    border: 2px solid rgba(0, 0, 0, 0.3);
     border-radius: 50%;
-    height: 20px;
-    width: 20px;
-    border-radius: 50%px;
+    height: 22px;
+    width: 22px;
     background: white;
     opacity: 1;
-    box-shadow: 5px 5px 5px #888888;
-    	outline : 0px;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+    outline: 0px;
+    transition: all 0.2s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
 }
 
 input[type=range] {
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
     cursor: pointer;
-    width: 125px;
-    height: 6px;
-    opacity: 0.75;
-    box-shadow: 5px 5px 5px #888888;
-    outline : 0px;
+    width: 140px;
+    height: 8px;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+    outline: 0px;
 }
 
 
 p{
 	color: black;
-	font-family : 'Homemade Apple', cursive;
+	font-family: 'Kalam', 'Homemade Apple', cursive;
 	font-size:50px;
 	padding-bottom: 0px;
+	margin: 5px 0;
+}
+
+/* Title styling - larger and more prominent */
+p#title-main {
+	font-family: 'Caveat', cursive;
+	font-size: 64px;
+	font-weight: 700;
+	margin: 10px 0 5px 0;
+	letter-spacing: 2px;
+}
+
+/* Small labels for parameters */
+.param-label {
+	font-family: 'Kalam', cursive;
+	font-size: 14px !important;
+	font-weight: 300;
+	color: rgba(0, 0, 0, 0.6);
+	margin: 2px 0 !important;
+	padding: 0 !important;
 }
 
 select {
@@ -40,21 +71,32 @@ select {
     -moz-appearance: none;
 	cursor: pointer;
   	display: inline-block;
-  	font-family : 'Homemade Apple', cursive;
-	font-size:18px;
-	height: 40px;
-	outline : 0px;
-	outline-color: rgb(206,190,190);	
-	background-color: rgb(206,190,190);
-	color:rgb(0); 
-	padding-left:5px; ;
-	padding-right: 5px; 
-	border:0px; 
-	line-height: 30px;	
+  	font-family: 'Kalam', cursive;
+	font-size: 18px;
+	font-weight: 400;
+	height: 38px;
+	outline: 0px;
+	outline-color: rgb(206,190,190);
+	background-color: rgba(255, 255, 255, 0.9);
+	color: rgb(0);
+	padding-left: 10px;
+	padding-right: 10px;
+	border: 2px solid rgba(0, 0, 0, 0.1);
+	line-height: 34px;
     text-align-last: center;
-     border-radius: 10px;
-     box-shadow: 5px 5px 5px #888888;
-    
+    border-radius: 8px;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+/* Sequence selector - larger and more prominent */
+select#sequence-select {
+	font-size: 28px;
+	height: 50px;
+	line-height: 46px;
+	font-weight: 700;
+	padding-left: 15px;
+	padding-right: 15px;
 }
 
 select:active, select:hover {
@@ -76,15 +118,29 @@ select.f-dropdown {
 button{
     -moz-appearance: none;
     color: black;
-	font-family : 'Homemade Apple', cursive;
-    background-color: rgb(206,190,190);
-    outline : 0px;
-    border : 0px;
-    outline-color: rgb(206,190,190);	
-	font-size:20px;
-	padding-bottom: 00px;
-    border-radius: 10px;
-     box-shadow: 5px 5px 5px #888888;
+	font-family: 'Kalam', cursive;
+	font-weight: 700;
+    background-color: rgba(255, 255, 255, 0.9);
+    outline: 0px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    outline-color: rgb(206,190,190);
+	font-size: 24px;
+	padding: 10px 30px;
+    border-radius: 8px;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+button:hover {
+	background-color: rgba(255, 255, 255, 1);
+	transform: translateY(-1px);
+	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+button:active {
+	transform: translateY(0px);
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 /* Tooltip container */
@@ -143,4 +199,100 @@ button{
 .tooltip:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
+}
+
+/* Audio Initialization Overlay */
+.init-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(206, 190, 190);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease-out;
+}
+
+.init-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.init-content {
+    text-align: center;
+    padding: 40px;
+    max-width: 600px;
+}
+
+.init-title {
+    font-family: 'Caveat', cursive;
+    font-size: 84px;
+    font-weight: 700;
+    color: black;
+    margin: 0 0 10px 0;
+    padding: 0;
+    letter-spacing: 2px;
+}
+
+.init-subtitle {
+    font-family: 'Kalam', cursive;
+    font-size: 22px;
+    font-weight: 300;
+    color: rgba(0, 0, 0, 0.6);
+    margin: 0 0 40px 0;
+    padding: 0;
+}
+
+.init-button {
+    font-family: 'Kalam', cursive;
+    font-size: 36px;
+    font-weight: 700;
+    padding: 20px 60px;
+    background-color: white;
+    color: black;
+    border: 3px solid rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+    margin-bottom: 20px;
+}
+
+.init-button:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 10px 10px 15px #888888;
+}
+
+.init-button:active {
+    transform: translateY(0px);
+    box-shadow: 5px 5px 8px #888888;
+}
+
+.init-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.init-status {
+    font-family: 'Kalam', cursive;
+    font-size: 20px;
+    font-weight: 400;
+    color: black;
+    margin: 10px 0;
+    padding: 0;
+    min-height: 30px;
+}
+
+.init-hint {
+    font-family: 'Kalam', cursive;
+    font-size: 16px;
+    font-weight: 300;
+    color: rgba(0, 0, 0, 0.5);
+    margin: 20px 0 0 0;
+    padding: 0;
 }
