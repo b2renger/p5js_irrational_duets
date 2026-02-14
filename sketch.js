@@ -56,11 +56,11 @@ var beatCount = 0;          // Global beat counter (increments with each pulse)
 var barCount = 0;           // Bar/measure counter (currently unused - potential future use)
 
 var current_tone = 2;       // Root note/key transposition (0-11, maps to C through B) - D=2
-var current_rythm = "Vals"; // Selected rhythm pattern (Vals = 3/4 waltz)
+var current_rythm = "Canon Walk"; // Selected rhythm pattern (Canon Walk = walking pattern)
 var current_scale = 2;      // Selected scale index (2 = minor scale - see utils.js)
 
-var soundBass = "celesta";      // MIDI instrument name for bass voice
-var soundLead = "harpsichord";  // MIDI instrument name for lead/treble voice
+var soundBass = "music_box";      // MIDI instrument name for bass voice
+var soundLead = "pizzicato_strings";  // MIDI instrument name for lead/treble voice
 
 // Audio Analysis
 var amplitude;              // p5.Amplitude analyzer - measures audio level for visual reactivity
@@ -419,15 +419,21 @@ function draw() {
     }
 
     // ========================================================================
-    // Debug info display (bottom-left corner)
+    // Debug info display (centered footer - Kalam font style)
     // ========================================================================
-    strokeWeight(1);
-    fill(0);
-    stroke(0);
-    textSize(20);
-    text("sequence index : " + index, 5, windowHeight - 65);
-    text("sequence value : " + pi[index], 5, windowHeight - 35);  // BUG: Always shows pi, not current_number
-    text("note name : " + interval2notes[pi[index]].toLocaleLowerCase(), 5, windowHeight - 5);  // BUG: Same issue
+    // Use canvas context directly to avoid p5.js overriding the font
+    drawingContext.save();  // Save current state
+    drawingContext.font = '100 24px Kalam';  // Thin weight (100), 24px size
+    drawingContext.fillStyle = 'black';
+    drawingContext.textAlign = 'center';
+    drawingContext.textBaseline = 'alphabetic';
+
+    // Display three lines of debug info, centered horizontally
+    drawingContext.fillText("sequence index : " + index, windowWidth/2, windowHeight - 50);
+    drawingContext.fillText("sequence value : " + current_number[index], windowWidth/2, windowHeight - 30);
+    drawingContext.fillText("note name : " + interval2notes[current_number[index]].toLocaleLowerCase(), windowWidth/2, windowHeight - 10);
+
+    drawingContext.restore();  // Restore previous state
 }
 
 /**
@@ -461,7 +467,6 @@ function draw() {
  * This encoding system multiplies noteDur by arg.length to get actual duration
  */
 function pulseIncr() {
-
     checkDrawingMargins();  // Wrap to next line if we've filled current staff
 
     // ========================================================================

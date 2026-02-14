@@ -130,7 +130,12 @@ function Gui(x,y,w,h){
 
     // control elements
     button = createButton('play');
-    button.mousePressed(makeplay);
+    // Use native DOM event listener to prevent double-firing
+    button.elt.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        makeplay();
+    }, false);
 
 
 
@@ -180,13 +185,13 @@ function Gui(x,y,w,h){
     // ========================================================================
     // Set default selections to match initial values in sketch.js
     // ========================================================================
-    // Pi, Vals (waltz), Harpsichord & Celesta, D minor
-    number_selection.selected('Pi');                 // Pi sequence
-    rythm_selection.selected('Vals');                // 3/4 waltz rhythm
-    lead_selection.selected('for harpsichord');      // Harpsichord (index 7)
-    bass_selection.selected('and celesta');          // Celesta (index 8)
-    tone_selection.selected('in D');                 // D key (index 2)
-    scale_selection.selected('minor');               // Minor scale (index 2)
+    // Pi, Canon Walk, Pizzicato Strings & Music Box, D minor
+    number_selection.selected('Pi');                      // Pi sequence
+    rythm_selection.selected('Canon Walk');               // Canon Walk rhythm
+    lead_selection.selected('for pizzicato_strings');     // Pizzicato strings
+    bass_selection.selected('and music_box');             // Music box
+    tone_selection.selected('in D');                      // D key (index 2)
+    scale_selection.selected('minor');                    // Minor scale (index 2)
 
 }
 
@@ -243,30 +248,45 @@ Gui.prototype.resize = function(x,y,w,h){
 
     scale_selection.position(xPos, yPos);
 
-    yPos += lead_selection.elt.clientHeight + 20;
+    yPos += lead_selection.elt.clientHeight + 45;  // More space for slider labels
 
     // ========================================================================
-    // ROW 4: Playback controls - Left-aligned with good spacing
+    // ROW 4: Playback controls - Centered horizontally, sliders aligned with button center
     // Format: [Play] [BPM: slider] [Legato: slider] [Start: slider] [Loop]
     // ========================================================================
-    xPos = margin;
+
+    // Calculate total width of controls
+    var controlSpacing = 30;
+    var controlsWidth = button.elt.clientWidth +
+                        bpm_selection.elt.clientWidth +
+                        note_duration_selection.elt.clientWidth +
+                        startIndex.elt.clientWidth +
+                        stopIndex.elt.clientWidth +
+                        (controlSpacing * 4);
+
+    // Center the controls horizontally
+    xPos = this.w/2 - controlsWidth/2;
+
+    // Button height for vertical centering
+    var buttonHeight = button.elt.clientHeight;
+    var sliderOffset = (buttonHeight / 2) - 4;  // Center slider with button
 
     button.position(xPos, yPos);
-    xPos += button.elt.clientWidth + 30;
+    xPos += button.elt.clientWidth + controlSpacing;
 
-    bpm_label.position(xPos, yPos - 25);
-    bpm_selection.position(xPos, yPos + 10);
-    xPos += bpm_selection.elt.clientWidth + 30;
+    bpm_label.position(xPos, yPos - 20);
+    bpm_selection.position(xPos, yPos + sliderOffset);
+    xPos += bpm_selection.elt.clientWidth + controlSpacing;
 
-    dur_label.position(xPos, yPos - 25);
-    note_duration_selection.position(xPos, yPos + 10);
-    xPos += note_duration_selection.elt.clientWidth + 30;
+    dur_label.position(xPos, yPos - 20);
+    note_duration_selection.position(xPos, yPos + sliderOffset);
+    xPos += note_duration_selection.elt.clientWidth + controlSpacing;
 
-    startIndex_label.position(xPos, yPos - 25);
-    startIndex.position(xPos, yPos + 10);
-    xPos += startIndex.elt.clientWidth + 30;
+    startIndex_label.position(xPos, yPos - 20);
+    startIndex.position(xPos, yPos + sliderOffset);
+    xPos += startIndex.elt.clientWidth + controlSpacing;
 
-    stopIndex.position(xPos, yPos + 10);
+    stopIndex.position(xPos, yPos);  // Align with button, not with sliders
 
 }
 
@@ -289,7 +309,7 @@ function makeplay(){
         // Verify audio context is initialized
         if (!ctxLoaded) {
             console.warn('Audio not ready yet. Please wait for instruments to load.');
-            alert('Audio is still loading. Please click anywhere on the page first, then wait a moment before playing.');
+            alert('Audio is still loading. Please wait for instruments to load.');
             return;
         }
 
@@ -300,9 +320,24 @@ function makeplay(){
             return;
         }
 
-        // Start playback
-        phraseContainer.loop();
-        phraseContainer.start();
+        // Verify phraseContainer exists
+        if (!phraseContainer) {
+            console.error('phraseContainer is not initialized!');
+            alert('Sequencer not initialized. Please refresh the page.');
+            return;
+        }
+
+        // CRITICAL: Resume audio context if suspended (browser autoplay policy)
+        if (ctx && ctx.state === 'suspended') {
+            ctx.resume().then(function() {
+                phraseContainer.loop();
+                phraseContainer.start(0);  // Start immediately at time 0
+            });
+        } else {
+            phraseContainer.loop();
+            phraseContainer.start(0);  // Start immediately at time 0
+        }
+
         play = true;
         button.elt.innerHTML = "Pause";
    }
